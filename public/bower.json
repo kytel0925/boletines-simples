@@ -1,0 +1,9 @@
+{
+  "name": "Boletines simples",
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "metisMenu": "~2.1.0",
+    "react": "~0.13.3",
+    "startbootstrap-sb-admin-2": "~1.0.7"
+  }
+}
