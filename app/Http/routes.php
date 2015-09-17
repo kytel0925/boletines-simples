@@ -14,6 +14,11 @@
 Route::get('/', 'Main@index');
 Route::get('login', 'Auth\AuthController@getLogin'); //Alias
 Route::get('auth/login', 'Auth\AuthController@getLogin');
+
+Route::post('login', 'Auth\AuthController@postLogin'); //Alias
 Route::post('auth/login', 'Auth\AuthController@postLogin');
+
 Route::get('logout', 'Auth\AuthController@getLogout'); //Alias
 Route::get('auth/logout', 'Auth\AuthController@getLogout');
+
+Route::controller('dashboard', 'Dashboard\Dashboard');

@@ -9,7 +9,8 @@
                 <h3 class="panel-title">{{trans('auth.views.login.title')}}</h3>
             </div>
             <div class="panel-body">
-                <form role="form">
+                <form role="form" action="{{asset('login')}}" method="post">
+                    {!! csrf_field() !!}
                     <fieldset>
                         <div class="form-group">
                             <input class="form-control" placeholder="{{trans('auth.views.login.labels.email')}}" name="email" type="email" autofocus>
@@ -23,7 +24,7 @@
                             </label>
                         </div>
                         <!-- Change this to a button or input when using this as a form -->
-                        <a href="index.html" class="btn btn-lg btn-success btn-block">{{trans('auth.views.login.labels.login')}}</a>
+                        <button class="btn btn-lg btn-success btn-block">{{trans('auth.views.login.labels.login')}}</button>
                     </fieldset>
                 </form>
             </div>

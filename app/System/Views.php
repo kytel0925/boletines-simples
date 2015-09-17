@@ -4,6 +4,7 @@
 namespace App\System;
 
 use App\Http\Controllers\Application;
+use Illuminate\Routing\Controller;
 
 abstract class Views{
 	private static $configTemplate = 'my.app.views.template';
@@ -16,6 +17,13 @@ abstract class Views{
 		$template = config(self::$configTemplate);
 
 		$viewRoute = "{$template}.{$viewName}";
+
+		return view($viewRoute, $data, $mergeData);
+	}
+
+	public static function template($component, array $data = [], array $mergeData = []){
+		$template = config(self::$configTemplate);
+		$viewRoute = "{$template}.{$component}";
 
 		return view($viewRoute, $data, $mergeData);
 	}
