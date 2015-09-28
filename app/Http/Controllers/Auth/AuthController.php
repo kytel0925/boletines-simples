@@ -49,7 +49,7 @@ class AuthController extends Controller{
     }
 
 	public function getLogin(){
-		return Views::template('auth.login.index');
+		return view('startbootstrap-sb-admin.auth.login.index');
 	}
 
 	protected function authenticated(Request $request, User $user){

@@ -1,9 +1,11 @@
 {
   "name": "Boletines simples",
   "dependencies": {
+    "griddle-react": "~0.2.0",
     "jquery": "~2.1.4",
     "metisMenu": "~2.1.0",
     "react": "~0.13.3",
+    "react-bootstrap": "~0.25.2",
     "startbootstrap-sb-admin-2": "~1.0.7"
   }
 }

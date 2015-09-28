@@ -13,7 +13,10 @@ class Dashboard extends Application{
 			'request' => $request
 		];
 
-		return $this->getView('dashboard.dashboard.index', $data);
+		return $this->getView('dashboard.index', $data);
+	}
 
+	public function getDash(Request $request){
+		return $this->getView('dashboard.dash');
 	}
 }

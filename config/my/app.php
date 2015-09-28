@@ -2,6 +2,6 @@
 
 return [
 	'views' => [
-		'template' => 'startbootstrap-sb-admin'
+		'template' => 'easy-ui'
 	]
 ];

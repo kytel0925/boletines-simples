@@ -22,3 +22,7 @@ Route::get('logout', 'Auth\AuthController@getLogout'); //Alias
 Route::get('auth/logout', 'Auth\AuthController@getLogout');
 
 Route::controller('dashboard', 'Dashboard\Dashboard');
+Route::controller('mailings', 'Mailings\Mailings');
+Route::controller('subscribers', 'Subscribers\Subscribers');
+Route::controller('subscribers-lists', 'Subscribers\Lists');
+Route::controller('tasks', 'Tasks\Tasks');
