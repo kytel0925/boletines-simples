@@ -23,6 +23,6 @@ class Main extends Controller{
 			return $auth->getLogin();
 		}
 
-		return "Estar autenticado";
+		return redirect()->intended('dashboard');
 	}
 }

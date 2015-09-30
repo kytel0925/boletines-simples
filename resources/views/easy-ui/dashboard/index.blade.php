@@ -7,4 +7,5 @@
     <script src="{{asset('js/apps/AppTasks.js')}}" type="text/javascript"></script>
     <script src="{{asset('js/apps/AppSubscribers.js')}}" type="text/javascript"></script>
     <script src="{{asset('js/apps/AppSubscribersLists.js')}}" type="text/javascript"></script>
+    <script src="{{asset('js/apps/AppSenders.js')}}" type="text/javascript"></script>
 @stop

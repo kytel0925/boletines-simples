@@ -6,6 +6,7 @@
             <div style="width:150px;">
                 <div data-options="iconCls:'fa fa-edit',app:AppMailings" class="app-item">Edit</div>
                 <div data-options="iconCls:'fa fa-tasks',app:AppTasks" class="app-item">Tasks</div>
+                <div data-options="iconCls:'fa fa-paper-plane',app:AppSenders" class="app-item">Senders</div>
             </div>
         </div>
         <div data-options="iconCls:'fa fa-user'">
