@@ -22,13 +22,16 @@ class Senders extends Application{
 	}
 
 	public function postCreate(Request $request){
-		$data = $request->only(['name', 'email']);
+		$data = $request->only(['alias', 'username', 'password', 'host', 'maximum_per_day']);
 
 		return Sender::create($data);
 	}
 
 	public function postSave(Request $request){
+		/** @var Sender $sender */
 		$sender = Sender::findOrFail($request->input('id'));
+		$sender->fill($request->only(['alias', 'username', 'password', 'host', 'maximum_per_day']));
+		$sender->save();
 
 		return $sender;
 

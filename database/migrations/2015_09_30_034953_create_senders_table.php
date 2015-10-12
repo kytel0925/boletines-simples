@@ -15,7 +15,7 @@ class CreateSendersTable extends Migration{
 			$table->string('alias');
 			$table->string('username');
 			$table->string('password');
-			$table->string('domain');
+			$table->string('host');
 			$table->tinyInteger('maximum_per_day');
 			$table->timestamps();
 			$table->softDeletes();

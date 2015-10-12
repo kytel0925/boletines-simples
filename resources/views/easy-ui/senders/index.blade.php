@@ -25,14 +25,14 @@
             <th data-options="field:'id',width:10">Id</th>
             <th data-options="field:'alias',width:30">Alias</th>
             <th data-options="field:'username',width:30">User</th>
-            <th data-options="field:'domain',width:30">Domain</th>
+            <th data-options="field:'host',width:30">Host</th>
             <th data-options="field:'status',width:10,align:'center'">Status</th>
         </tr>
         </thead>
     </table>
 </div>
 
-<div id="senders-dialog-{{$uuid}}" class="easyui-dialog" style="width:50%;height:30%;max-width:400px;min-width: 300px; min-height: 200px;"
+<div id="senders-dialog-{{$uuid}}" class="easyui-dialog" style="width:50%;height:30%;max-width:400px;min-width: 400px; min-height: 250px;"
      data-options="modal:true,draggable:false,resizable:false,title:'Senders edition',iconCls:'fa fa-database',closed:true,
          toolbar:[{
             text:'Save',
@@ -61,8 +61,8 @@
                 <td><input class="easyui-textbox" type="text" name="password" data-options="required:true,width:200" /></td>
             </tr>
             <tr>
-                <th>Domain:</th>
-                <td><input class="easyui-textbox" type="text" name="domain" data-options="required:true,width:200" /></td>
+                <th>Host:</th>
+                <td><input class="easyui-textbox" type="text" name="host" data-options="required:true,width:200" /></td>
             </tr>
             <tr>
                 <th>Max per day:</th>
