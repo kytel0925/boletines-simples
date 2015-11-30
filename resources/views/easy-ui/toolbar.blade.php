@@ -10,5 +10,5 @@
     <div data-options="iconCls:'fa fa-gear'">Settings</div>
     <div data-options="iconCls:'fa fa-inbox'">Notifications</div>
     <div class="menu-sep"></div>
-    <div data-options="iconCls:'fa fa-power-off'">Logout</div>
+    <div data-options="iconCls:'fa fa-power-off'" onclick="location.href = '{{asset('logout')}}'">Logout</div>
 </div>
