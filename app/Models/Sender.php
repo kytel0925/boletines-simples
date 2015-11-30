@@ -25,19 +25,30 @@ class Sender extends Model implements AuthorizableContract{
 	 */
 	protected $fillable = ['alias', 'username', 'password', 'host', 'maximum_per_day'];
 
+	public static function setConfiguration(array $options){
+		config([
+			'mail.host' => $options['host'],
+			'mail.port' => $options['port'],
+			'mail.from' => [
+				'address' => $options['address'],
+				'name' => $options['name']
+			],
+			'mail.username' => $options['username'],
+			'mail.password' => $options['password'],
+			'mail.encryption' => $options['encryption']
+		]);
+	}
+
 	public function send(MailMessage $mailMessage){
 		$from = $mailMessage->getFrom();
-
-		config([
-			'mail.host' => $this->host,
+		self::setConfiguration([
+			'host' => $this->host,
+			'port' => isset($this->port)? $this->port : 25,
+			'address' => $from['address'],
+			'name' => $from['name'],
 			'username' => $this->username,
-			'password' => $this->password,
-			'mail.from' => [
-				'address' => $from['address'],
-				'name' => $from['name']
-			]
+			'password' => $this->password
 		]);
-
 
 		$status = Mail::raw($mailMessage->getMessage(), function ($message) use ($mailMessage){
 			$to = $mailMessage->getDestinatary();

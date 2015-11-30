@@ -17,8 +17,12 @@ class Subscribers extends Application{
 		return $this->getView('subscribers.index', $data);
 	}
 
-	public function postList(){
-		return Subscriber::get();
+	public function postList(Request $request){
+		$data = Subscriber::paginate($request->input('rows'));
+		return [
+			'total' => $data->total(),
+			'rows' => $data->items()
+		];
 	}
 
 	public function postCreate(Request $request){
