@@ -38,6 +38,7 @@ class Sender extends Model implements AuthorizableContract{
 			]
 		]);
 
+
 		$status = Mail::raw($mailMessage->getMessage(), function ($message) use ($mailMessage){
 			$to = $mailMessage->getDestinatary();
 			$message->to($to['email'], $to['name']);

@@ -2,6 +2,7 @@
 @section('app.title', trans('auth.title'))
 
 @section('auth.content')
+<h1>Hola Mundo</h1>
 <div class="row">
     <div class="col-md-4 col-md-offset-4">
         <div class="login-panel panel panel-default">
