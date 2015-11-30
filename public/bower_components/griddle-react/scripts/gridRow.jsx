@@ -1,14 +1,10 @@
-﻿/** @jsx React.DOM */
-
 /*
-   Griddle - Simple Grid Component for React
-   https://github.com/DynamicTyped/Griddle
-   Copyright (c) 2014 Ryan Lanciaux | DynamicTyped
-
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var React = require('react');
 var _ = require('underscore');
+var ColumnProperties = require('./columnProperties.js');
+var deep = require('./deep.js');
 
 var GridRow = React.createClass({
     getDefaultProps: function(){
@@ -16,66 +12,119 @@ var GridRow = React.createClass({
         "isChildRow": false,
         "showChildren": false,
         "data": {},
-        "metadataColumns": [],
+        "columnSettings": null,
+        "rowSettings": null,
         "hasChildren": false,
-        "columnMetadata": null,
         "useGriddleStyles": true,
         "useGriddleIcons": true,
         "isSubGriddle": false,
+        "paddingHeight": null,
+        "rowHeight": null,
         "parentRowCollapsedClassName": "parent-row",
         "parentRowExpandedClassName": "parent-row expanded",
         "parentRowCollapsedComponent": "▶",
-        "parentRowExpandedComponent": "▼"
-
+        "parentRowExpandedComponent": "▼",
+        "onRowClick": null,
+	    "multipleSelectionSettings": null
       }
     },
-    handleClick: function(){
-      this.props.toggleChildren();
+    handleClick: function(e){
+        if(this.props.onRowClick !== null && _.isFunction(this.props.onRowClick) ){
+            this.props.onRowClick(this, e);
+        }else if(this.props.hasChildren){
+            this.props.toggleChildren();
+        }
+    },
+    handleSelectionChange: function(e) {
+      //hack to get around warning that's not super useful in this case
+      return;
+    },
+	handleSelectClick: function(e) {
+		if(this.props.multipleSelectionSettings.isMultipleSelection) {
+			if(e.target.type === "checkbox") {
+				this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, this.refs.selected.checked);
+			} else {
+				this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, !this.refs.selected.checked)
+			}
+		}
+	},
+    verifyProps: function(){
+        if(this.props.columnSettings === null){
+           console.error("gridRow: The columnSettings prop is null and it shouldn't be");
+        }
     },
     render: function() {
+        this.verifyProps();
         var that = this;
-        var columnStyles = this.props.useGriddleStyles ?
-          {
-            padding: "5px",
+        var columnStyles = null;
+
+        if (this.props.useGriddleStyles) {
+          columnStyles = {
+            margin: "0",
+            padding: that.props.paddingHeight + "px 5px " + that.props.paddingHeight + "px 5px",
+            height: that.props.rowHeight? this.props.rowHeight - that.props.paddingHeight * 2 + "px" : null,
             backgroundColor: "#FFF",
             borderTopColor: "#DDD",
             color: "#222"
-          } : null;
+          };
+        }
 
-        var nodes = _.pairs(_.omit(this.props.data, this.props.metadataColumns)).map(function(col, index) {
+        var columns = this.props.columnSettings.getColumns();
+
+        // make sure that all the columns we need have default empty values
+        // otherwise they will get clipped
+        var defaults = _.object(columns, []);
+
+        // creates a 'view' on top the data so we will not alter the original data but will allow us to add default values to missing columns
+        var dataView = _.extend(this.props.data);
+
+        _.defaults(dataView, defaults);
+        var data = _.pairs(deep.pick(dataView, _.without(columns, 'children')));
+        var nodes = data.map((col, index) => {
             var returnValue = null;
-            var meta = _.findWhere(that.props.columnMetadata, {columnName: col[0]});
+            var meta = this.props.columnSettings.getColumnMetadataByName(col[0]);
 
             //todo: Make this not as ridiculous looking
-            firstColAppend = index === 0 && that.props.hasChildren && that.props.showChildren === false && that.props.useGriddleIcons ?
-              <span style={that.props.useGriddleStyles&&{fontSize: "10px", marginRight:"5px"}}>{that.props.parentRowCollapsedComponent}</span> :
-              index === 0 && that.props.hasChildren && that.props.showChildren && that.props.useGriddleIcons ?
-                <span style={that.props.useGriddleStyles&&{fontSize: "10px"}}>{that.props.parentRowExpandedComponent}</span> : "";
+            var firstColAppend = index === 0 && this.props.hasChildren && this.props.showChildren === false && this.props.useGriddleIcons ?
+              <span style={this.props.useGriddleStyles ? {fontSize: "10px", marginRight:"5px"} : null}>{this.props.parentRowCollapsedComponent}</span> :
+              index === 0 && this.props.hasChildren && this.props.showChildren && this.props.useGriddleIcons ?
+                <span style={this.props.useGriddleStyles ? {fontSize: "10px"} : null}>{this.props.parentRowExpandedComponent}</span> : "";
 
-            if(index === 0 && that.props.isChildRow && that.props.useGriddleStyles){
+            if(index === 0 && this.props.isChildRow && this.props.useGriddleStyles){
               columnStyles = _.extend(columnStyles, {paddingLeft:10})
             }
 
-
-            if (that.props.columnMetadata !== null && that.props.columnMetadata.length > 0 && typeof meta !== "undefined"){
-              var colData = (typeof meta === 'undefined' || typeof meta.customComponent === 'undefined' || meta.customComponent === null) ? col[1] : <meta.customComponent data={col[1]} rowData={that.props.data} />;
-              returnValue = (meta == null ? returnValue : <td onClick={that.props.hasChildren && that.handleClick} className={meta.cssClassName} key={index} style={columnStyles}>{colData}</td>);
+            if (this.props.columnSettings.hasColumnMetadata() && typeof meta !== "undefined"){
+              var colData = (typeof meta.customComponent === 'undefined' || meta.customComponent === null) ? col[1] : <meta.customComponent data={col[1]} rowData={dataView} metadata={meta} />;
+              returnValue = (meta == null ? returnValue : <td onClick={this.handleClick} className={meta.cssClassName} key={index} style={columnStyles}>{colData}</td>);
             }
 
-            return returnValue || (<td onClick={that.props.hasChildren && that.handleClick} key={index} style={columnStyles}>{firstColAppend}{col[1]}</td>);
+            return returnValue || (<td onClick={this.handleClick} key={index} style={columnStyles}>{firstColAppend}{col[1]}</td>);
         });
 
-        //this is kind of hokey - make it better
-        var className = "standard-row";
+		if(nodes && this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection) {
+			var selectedRowIds = this.props.multipleSelectionSettings.getSelectedRowIds();
 
+			nodes.unshift(
+              <td key="selection" style={columnStyles}>
+                <input
+                    type="checkbox"
+                    checked={this.props.multipleSelectionSettings.getIsRowChecked(dataView)}
+                    onChange={this.handleSelectionChange}
+                    ref="selected" />
+              </td>
+            );
+		}
+
+        //Get the row from the row settings.
+        var className = that.props.rowSettings&&that.props.rowSettings.getBodyRowMetadataClass(that.props.data) || "standard-row";
 
         if(that.props.isChildRow){
             className = "child-row";
         } else if (that.props.hasChildren){
             className = that.props.showChildren ? this.props.parentRowExpandedClassName : this.props.parentRowCollapsedClassName;
         }
-
-        return (<tr className={className}>{nodes}</tr>);
+        return (<tr onClick={this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection ? this.handleSelectClick : null} className={className}>{nodes}</tr>);
     }
 });
 

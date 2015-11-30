@@ -5,7 +5,7 @@
             <span>Mailings</span>
             <div style="width:150px;">
                 <div data-options="iconCls:'fa fa-edit',app:AppMailings" class="app-item">Edit</div>
-                <div data-options="iconCls:'fa fa-tasks',app:AppTasks" class="app-item">Tasks</div>
+                <!--<div data-options="iconCls:'fa fa-tasks',app:AppTasks" class="app-item">Tasks</div>-->
                 <div data-options="iconCls:'fa fa-paper-plane',app:AppSenders" class="app-item">Senders</div>
             </div>
         </div>
@@ -13,7 +13,7 @@
             <span>Subscribers</span>
             <div style="width:150px;">
                 <div data-options="iconCls:'fa fa-database',app:AppSubscribers" class="app-item">Database</div>
-                <div data-options="iconCls:'fa fa-list',app:AppSubscribersLists" class="app-item">Lists</div>
+                <!--<div data-options="iconCls:'fa fa-list',app:AppSubscribersLists" class="app-item">Lists</div>-->
             </div>
         </div>
     </div>

@@ -1,4 +1,5 @@
 // jshint ignore: start
+
 module.exports = function(grunt) {
 
   // Project configuration.
@@ -16,19 +17,6 @@ module.exports = function(grunt) {
     open: {
       server: {
         url: 'http://localhost:<%= connect.server.options.port %>/docs/html/'
-      }
-    },
-    react: {
-      dynamic_mappings: {
-        files: [
-          {
-            expand: true,
-            cwd: 'scripts/',
-            src: ['**/*.jsx'],
-            dest: 'modules/',
-            ext: '.jsx.js'
-          }
-        ]
       }
     },
     jshint: {
@@ -80,7 +68,8 @@ module.exports = function(grunt) {
     },
     clean: {
       docs: [ "docs/html"],
-      includes: [ "docs/dist"]
+      includes: [ "docs/dist"],
+      compiled: ["compiled"]
     },
     copy: {
       docs: {
@@ -88,12 +77,17 @@ module.exports = function(grunt) {
           { expand: true, cwd: 'docs/assets/', src: ['**'], dest: 'docs/html/', flatten: false},
           { expand: true, src: ['examples/assets/scripts/testComponent.js', 'examples/assets/scripts/fakeData.js', 'examples/assets/scripts/swapi.min.js', 'examples/assets/scripts/freezeframe.min.js', 'examples/assets/scripts/GriddleWithCallback.js'], dest: 'docs/html/scripts', flatten: true}
         ]
+      },
+      modules: {
+        files: [
+          {expand: true, src: ['compiled/columnProperties.js', 'compiled/rowProperties.js', 'compiled/deep.js'], dest: 'modules', flatten: true}
+        ]
       }
     },
     webpack: {
       default: {
         entry: {
-          Griddle: ['./scripts/griddle.jsx'],
+          Griddle: ['./compiled/griddle.jsx'],
         },
         output: {
           path: __dirname,
@@ -107,7 +101,7 @@ module.exports = function(grunt) {
         },
         module: {
           loaders: [
-            {test: /\.jsx$/, loader: 'jsx'}
+            {test: /\.jsx$/, loader: 'babel'}
           ]
         },
         externals: {
@@ -118,7 +112,7 @@ module.exports = function(grunt) {
       },
       docs: {
         entry: {
-            Griddle: ['./scripts/griddle.jsx'],
+            Griddle: ['./compiled/griddle.jsx'],
             ChartistGraph: ['./node_modules/react-chartist/index.js']
         },
         output: {
@@ -132,9 +126,10 @@ module.exports = function(grunt) {
           extensions: ['', '.js', '.jsx']
         },
         module: {
-          loaders: [
-            {test: /\.jsx$/, loader: 'jsx'}
-          ]
+          loaders: [{
+            test: /\.jsx?$/,
+            loader: 'babel',
+          }]
         },
         externals: {
           "react": "React",
@@ -143,9 +138,33 @@ module.exports = function(grunt) {
         }
       }
     },
+    "babel": {
+      options: {
+        sourceMap: false
+      },
+      build: {
+        files: [{
+            expand: true,
+            cwd: 'scripts/',
+            src: ['**/*.js', '**/*.jsx'],
+            dest: 'compiled/'
+          }]
+      },
+      dynamic_mappings: {
+        files: [
+          {
+            expand: true,
+            cwd: 'compiled/',
+            src: ['**/*.jsx'],
+            dest: 'modules/',
+            ext: '.jsx.js'
+          }
+        ]
+      }
+    },
     watch: {
       scripts: {
-        files: ['**/*.jsx', "docs/assets/**/*.css", "docs/assets/**/*.html", "docs/src/**/*.*", "examples/**/*.*"],
+        files: ['**/*.jsx', "docs/assets/**/*.css", "docs/assets/**/*.html", "docs/src/**/*.*", "examples/**/*.*", "scripts/**/*.js"],
         tasks: ['build'],
         options: {
           spawn: false,
@@ -160,12 +179,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-react');
   grunt.loadNpmTasks('grunt-jsxhint');
   grunt.loadNpmTasks('grunt-webpack');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-markdown');
   grunt.loadNpmTasks('grunt-include-replace');
+  grunt.loadNpmTasks('grunt-babel');
 
   grunt.registerTask('serve', function (target) {
     grunt.task.run([
@@ -182,9 +201,13 @@ module.exports = function(grunt) {
       'includereplace',
       'markdown',
       'clean:includes',
+      'clean:compiled',
+      'babel:build',
       'webpack:docs',
       'webpack:default',
       'copy',
+      'babel:dynamic_mappings',
+      'clean:compiled'
     ]);
   })
 

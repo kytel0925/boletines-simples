@@ -1,10 +1,4 @@
-﻿/** @jsx React.DOM */
-
 /*
-   Griddle - Simple Grid Component for React
-   https://github.com/DynamicTyped/Griddle
-   Copyright (c) 2014 Ryan Lanciaux | DynamicTyped
-
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var React = require('react');
@@ -19,7 +13,7 @@ var GridFilter = React.createClass({
         this.props.changeFilter(event.target.value);
     },
     render: function(){
-        return <div className="row filter-container"><input type="text" name="filter" placeholder={this.props.placeholderText} className="form-control" onChange={this.handleChange} /></div>
+        return <div className="filter-container"><input type="text" name="filter" placeholder={this.props.placeholderText} className="form-control" onChange={this.handleChange} /></div>
     }
 });
 

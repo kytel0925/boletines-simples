@@ -1,42 +1,56 @@
-/** @jsx React.DOM */
 jest.dontMock('../gridTitle.jsx');
+jest.dontMock('../columnProperties.js');
 
-var React = require('react/addons');
+var React = require('react');
 var GridTitle = require('../gridTitle.jsx');
-var TestUtils = React.addons.TestUtils;
+var TestUtils = require('react-addons-test-utils');
+var ColumnProperties = require('../columnProperties.js');
 
 describe('GridTitle', function() {
-	var title; 
-	var columns; 
+	var title;
+	var columns;
+	var columnSettings;
+	var sortObject;
+	var multipleSelectOptions;
+	var multipleSelectSettings;
+
 	beforeEach(function(){
 		columns = ["one", "two", "three"];
-	    title = TestUtils.renderIntoDocument(<GridTitle columns={columns} />);
-	});
+		columnSettings = new ColumnProperties(columns, [], "children", [], []);
+    sortObject =  {
+        enableSort: true,
+        changeSort: null,
+        sortColumn: "",
+        sortAscending: true,
+				sortDefaultComponent: null,
+        sortAscendingClassName: "",
+        sortDescendingClassName: "",
+        sortAscendingComponent: null,
+        sortDescendingComponent: null
+    };
+    multipleSelectSettings = {
+			isMultipleSelection: false,
+			toggleSelectAll: function(){},
+			getIsSelectAllChecked: function(){},
 
-	it('calls method when clicked', function(){
-		var node = TestUtils.findRenderedDOMComponentWithTag(title, 'thead');
-		var headings = TestUtils.scryRenderedDOMComponentsWithTag(node, 'th');
-
-		var mock = jest.genMockFunction(); 
-		title.props.changeSort = mock;
-
-		expect(headings.length).toEqual(3);
-
-		var first = headings[0];
-		expect(TestUtils.isDOMComponent(first)).toBe(true);
-		expect(title.props.sortColumn).toEqual("");
-
-		//todo: can we just get this from jsdom?
-		var someEvent = {
-			"target":{
-				"dataset":{
-					"title": "one"
-				}
-			}
+			toggleSelectRow: function(){},
+			getSelectedRowIds: function(){},
+      getIsRowChecked: function(){}
 		};
-		React.addons.TestUtils.Simulate.click(first, someEvent);
 
-		expect(mock.mock.calls).toEqual([["one"]]);
+    var renderer = TestUtils.createRenderer();
+    renderer.render(<GridTitle columns={columns} columnSettings={columnSettings} sortSettings={sortObject} multipleSelectionSettings={multipleSelectSettings} />);
+    title = renderer.getRenderOutput();
+	});
+  
+	it('calls sortDefaultComponent in table init', function(){
+    expect(title.type).toBe('thead');
+    const headings = title.props.children.props.children.length;
+    expect(headings).toEqual(3);
 
-	})
+    for(var i = 0, l = headings.length; i < l; i++) {
+      var heading = headings[i];
+      expect(heading.props.children[1]).toEqual(sortObject['sortDefaultComponent']);
+    }
+	});
 });

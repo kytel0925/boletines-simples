@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
 
         // $this->call(UserTableSeeder::class);
 	    $this->createFirstUser();
+	    $this->createSecondUser();
 
         Model::reguard();
     }
@@ -27,6 +28,21 @@ class DatabaseSeeder extends Seeder
 			return $this->createUser([
 				'name' => 'Telmo Rafael Riofrio Tigse',
 				'email' => 'kytel0925@gmail.com',
+				'password' => 'admin',
+				'created_at' => date('Y-m-d H:i:s')
+			]);
+		}
+
+		return true;
+	}
+
+	private function createSecondUser(){
+		$master_email = 'daniel.gavilanes@gmail.com';
+		$exist = DB::table('user')->where('email', '=', $master_email)->count() > 0;
+		if(!$exist){
+			return $this->createUser([
+				'name' => 'Daniel Gavilanes',
+				'email' => 'daniel.gavilanes@gmail.com',
 				'password' => 'admin',
 				'created_at' => date('Y-m-d H:i:s')
 			]);

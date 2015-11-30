@@ -1,6 +1,8 @@
 Griddle
 =======
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/DynamicTyped/Griddle?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+Join us here [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/DynamicTyped/Griddle?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+[![Build Status](https://travis-ci.org/GriddleGriddle/Griddle.svg?branch=master)](https://travis-ci.org/GriddleGriddle/Griddle)
 
 ----------
 
@@ -30,9 +32,26 @@ To run from source, type the following commands into a terminal:
 Griddle is not yet version 1. There are likely some areas that will change and some issues that you may encounter. Please submit issues / pull requests for anything you run into.
 
 ----------
+###Contributing:###
 
+Please feel free submit any bugs or suggestions as issues. If you are having problems getting up and running please post in the [Gitter chat](https://gitter.im/DynamicTyped/Griddle) and we'll try to help out. Pull requests are welcome but if you have an idea please post as an issue first to make sure everyone is on the same-page (and to help avoid duplicate work). If you are looking to help out but don't know where to start, please take a look at [approved issues that don't have anyone assigned](https://github.com/dynamictyped/griddle/issues?q=is%3Aopen+is%3Aissue+label%3Aapproved+no%3Aassignee).
+
+----------
 ###Changelog:###
- 0.2.0
+
+0.2.15
+
+- Upgrade to React 0.14 - big thanks to Sajin Shrestha (@sajinshrestha) on nearly single-handedly taking on this effort!
+
+0.2.13
+- Numerous bug fixes, additions.
+- Additional notes will be added soon.
+...
+
+0.2.1 - 0.2.3
+- Tweaks surrounding package.json dependencies.
+
+0.2.0
 
 1. __Styling__ - Griddle now renders as a single HTML table by default. Additionally, if you don't want to use Griddle's styles they can be turned off with a property `useGriddleStyles={false}`. [See more on styling](http://dynamictyped.github.io/Griddle/styling.html).
 1. __External Results__ - External data should now be passed in via props rather than a callback. The Griddle callback is still available for those that wish to use it but it's now in a separate module. [More on External Data](http://dynamictyped.github.io/Griddle/externalData.html)
@@ -71,4 +90,3 @@ __Breaking Changes:__
 4. Fixed an issue with filtering and external results
 5. External Results fixes/enhancements
 6. Metadata enhancements
-

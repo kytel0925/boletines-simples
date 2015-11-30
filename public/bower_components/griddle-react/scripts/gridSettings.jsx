@@ -1,10 +1,4 @@
-﻿/** @jsx React.DOM */
-
 /*
-   Griddle - Simple Grid Component for React
-   https://github.com/DynamicTyped/Griddle
-   Copyright (c) 2014 Ryan Lanciaux | DynamicTyped
-
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var React = require('react');
@@ -30,12 +24,13 @@ var GridSettings = React.createClass({
         this.props.setPageSize(value);
     },
     handleChange: function(event){
-        if(event.target.checked === true && _.contains(this.props.selectedColumns, event.target.dataset.name) === false){
-            this.props.selectedColumns.push(event.target.dataset.name);
+        var columnName = event.target.dataset ? event.target.dataset.name : event.target.getAttribute('data-name');
+        if(event.target.checked === true && _.contains(this.props.selectedColumns, columnName) === false){
+            this.props.selectedColumns.push(columnName);
             this.props.setColumns(this.props.selectedColumns);
         } else {
             /* redraw with the selected columns minus the one just unchecked */
-            this.props.setColumns(_.without(this.props.selectedColumns, event.target.dataset.name));
+            this.props.setColumns(_.without(this.props.selectedColumns, columnName));
         }
     },
     render: function(){
@@ -48,7 +43,7 @@ var GridSettings = React.createClass({
                 var checked = _.contains(that.props.selectedColumns, col);
                 //check column metadata -- if this one is locked make it disabled and don't put an onChange event
                 var meta  = _.findWhere(that.props.columnMetadata, {columnName: col});
-                var displayName = col; 
+                var displayName = col;
 
                 if (typeof meta !== "undefined" && typeof meta.displayName !== "undefined" && meta.displayName != null) {
                   displayName = meta.displayName;
@@ -57,9 +52,9 @@ var GridSettings = React.createClass({
                 if(typeof meta !== "undefined" && meta != null && meta.locked){
                     return <div className="column checkbox"><label><input type="checkbox" disabled name="check" checked={checked}  data-name={col}/>{displayName}</label></div>
                 } else if(typeof meta !== "undefined" && meta != null && typeof meta.visible !== "undefined" && meta.visible === false){
-                    return null; 
+                    return null;
                 }
-                return <div className="griddle-column-selection checkbox" style={that.props.useGriddleStyles ? { "float": "left", width: "20%"} : null }><label><input type="checkbox" name="check" onChange={that.handleChange} checked={checked}  data-name={col}/>{displayName}</label></div>
+                return <div className="griddle-column-selection checkbox" key={col} style={that.props.useGriddleStyles ? { "float": "left", width: "20%"} : null }><label><input type="checkbox" name="check" onChange={that.handleChange} checked={checked} data-name={col}/>{displayName}</label></div>
             });
         }
 
