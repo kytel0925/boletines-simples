@@ -27,7 +27,7 @@ class Mailing extends Model implements AuthorizableContract{
 	protected $fillable = ['subject', 'body', 'code', 'created_by'];
 
 	public function createdBy(){
-		return $this->belongsTo('App\User');
+		return $this->belongsTo('App\User', 'created_by');
 	}
 
 	public static function generateCode(){
@@ -37,5 +37,17 @@ class Mailing extends Model implements AuthorizableContract{
 		];
 
 		return sha1(base64_encode(json_encode($data)));
+	}
+
+	public function listMailings(){
+		return $this->hasMany('App\Models\ListMailing', 'mailing_id');
+	}
+
+	public function hasListOfMailings(){
+		return $this->listMailings()->count() > 0;
+	}
+
+	public function isFinish(){
+		return $this->status == 'finish';
 	}
 }

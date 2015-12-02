@@ -27,3 +27,4 @@ Route::controller('senders', 'Senders\Senders');
 Route::controller('subscribers', 'Subscribers\Subscribers');
 Route::controller('subscribers-lists', 'Subscribers\Lists');
 Route::controller('tasks', 'Tasks\Tasks');
+Route::controller('test', 'Senders\Tests');

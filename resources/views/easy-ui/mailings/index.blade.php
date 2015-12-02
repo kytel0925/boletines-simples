@@ -54,6 +54,14 @@
                         <td><input class="easyui-textbox" type="text" name="subject" data-options="required:true,width:200" /></td>
                     </tr>
                     <tr>
+                        <th>From:</th>
+                        <td><input class="easyui-textbox" type="text" name="from_name" data-options="required:true,width:200" /></td>
+                    </tr>
+                    <tr>
+                        <th>Mail:</th>
+                        <td><input class="easyui-textbox" type="text" name="from_mail" data-options="required:true,width:200,validType:'email'" /></td>
+                    </tr>
+                    <tr>
                         <th>Created by:</th>
                         <td><input readonly disabled class="easyui-textbox" type="text" name="created_by" data-options="required:true,width:200" value="{{Auth::user()->name}}" /></td>
                     </tr>
